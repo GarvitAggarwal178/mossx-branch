@@ -1,0 +1,345 @@
+{
+  "product": [
+    {
+      "id": "plant_1",
+      "title": "Monstera Deliciosa",
+      "discription": "A beautiful indoor plant with distinctive split leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/1.jpg",
+      "rating": 4.5,
+      "price": 100,
+      "quantity_sold": 50,
+      "stock": 200,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_2",
+      "title": "Snake Plant",
+      "discription": "A hardy indoor plant with tall, upright leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/2.jpg",
+      "rating": 4.8,
+      "price": 110,
+      "quantity_sold": 55,
+      "stock": 197,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_3",
+      "title": "Fiddle Leaf Fig",
+      "discription": "A popular indoor tree with large, violin-shaped leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/3.jpg",
+      "rating": 4.1,
+      "price": 120,
+      "quantity_sold": 60,
+      "stock": 194,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_4",
+      "title": "Peace Lily",
+      "discription": "An elegant plant with glossy leaves and white flowers.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/4.jpg",
+      "rating": 4.4,
+      "price": 130,
+      "quantity_sold": 65,
+      "stock": 191,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_5",
+      "title": "ZZ Plant",
+      "discription": "A low-maintenance plant with glossy, dark green leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/5.jpg",
+      "rating": 4.7,
+      "price": 140,
+      "quantity_sold": 70,
+      "stock": 188,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_6",
+      "title": "Pothos",
+      "discription": "A trailing plant with heart-shaped leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/6.jpg",
+      "rating": 4.2,
+      "price": 150,
+      "quantity_sold": 75,
+      "stock": 185,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_7",
+      "title": "Aloe Vera",
+      "discription": "A succulent plant with medicinal properties.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/7.jpg",
+      "rating": 4.6,
+      "price": 160,
+      "quantity_sold": 80,
+      "stock": 182,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_8",
+      "title": "Bird's Nest Fern",
+      "discription": "A tropical fern with wavy, bright green leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/8.jpg",
+      "rating": 4.3,
+      "price": 170,
+      "quantity_sold": 85,
+      "stock": 179,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_9",
+      "title": "Chinese Evergreen",
+      "discription": "A colorful plant with variegated leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/9.jpg",
+      "rating": 4.4,
+      "price": 180,
+      "quantity_sold": 90,
+      "stock": 176,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_10",
+      "title": "Rubber Plant",
+      "discription": "A tall plant with large, glossy leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/10.jpg",
+      "rating": 4.7,
+      "price": 190,
+      "quantity_sold": 95,
+      "stock": 173,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_11",
+      "title": "String of Pearls",
+      "discription": "A trailing succulent with bead-like leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/11.jpg",
+      "rating": 4.5,
+      "price": 200,
+      "quantity_sold": 100,
+      "stock": 170,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_12",
+      "title": "Calathea",
+      "discription": "A plant with beautifully patterned leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/12.jpg",
+      "rating": 4.8,
+      "price": 210,
+      "quantity_sold": 105,
+      "stock": 167,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_13",
+      "title": "Philodendron",
+      "discription": "A climbing plant with heart-shaped leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/13.jpg",
+      "rating": 4.2,
+      "price": 220,
+      "quantity_sold": 110,
+      "stock": 164,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_14",
+      "title": "Dracaena",
+      "discription": "A tall plant with striped leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/14.jpg",
+      "rating": 4.6,
+      "price": 230,
+      "quantity_sold": 115,
+      "stock": 161,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_15",
+      "title": "Spider Plant",
+      "discription": "A plant with long, arching leaves and plantlets.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/15.jpg",
+      "rating": 4.3,
+      "price": 240,
+      "quantity_sold": 120,
+      "stock": 158,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_16",
+      "title": "Jade Plant",
+      "discription": "A succulent with thick, oval leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/16.jpg",
+      "rating": 4.7,
+      "price": 250,
+      "quantity_sold": 125,
+      "stock": 155,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_17",
+      "title": "Boston Fern",
+      "discription": "A lush fern with feathery fronds.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/17.jpg",
+      "rating": 4.4,
+      "price": 260,
+      "quantity_sold": 130,
+      "stock": 152,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_18",
+      "title": "Pilea",
+      "discription": "A compact plant with round, coin-like leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/18.jpg",
+      "rating": 4.9,
+      "price": 270,
+      "quantity_sold": 135,
+      "stock": 149,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_19",
+      "title": "Croton",
+      "discription": "A colorful plant with variegated leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/19.jpg",
+      "rating": 4.1,
+      "price": 280,
+      "quantity_sold": 140,
+      "stock": 146,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_20",
+      "title": "Areca Palm",
+      "discription": "A tropical palm with feathery fronds.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/20.jpg",
+      "rating": 4.5,
+      "price": 290,
+      "quantity_sold": 145,
+      "stock": 143,
+      "tags": ["outdoor", "decorative"]
+    },
+    {
+      "id": "plant_21",
+      "title": "English Ivy",
+      "discription": "A climbing plant with lobed leaves.",
+      "imagesrc": "https://randomuser.me/api/portraits/men/21.jpg",
+      "rating": 4.3,
+      "price": 300,
+      "quantity_sold": 150,
+      "stock": 140,
+      "tags": ["indoor", "low-maintenance"]
+    },
+    {
+      "id": "plant_22",
+      "title": "Bamboo Palm",
+      "discription": "A graceful palm with delicate fronds.",
+      "imagesrc": "https://randomuser.me/api/portraits/women/22.jpg",
+      "rating": 4.6,
+      "price": 310,
+      "quantity_sold": 155,
+      "stock": 137,
+      "tags": ["outdoor", "decorative"]
+    }
+  ],
+  "SeasonalCollection": [
+    {
+      "id": "seasonal_1",
+      "plants": ["plant_1", "plant_2"],
+      "title": "Seasonal Collection 1",
+      "imgSrc": "https://randomuser.me/api/portraits/men/23.jpg",
+      "discription": "Perfect plants for season 1.",
+      "theme": {
+        "color": "green",
+        "season": "Spring"
+      }
+    },
+    {
+      "id": "seasonal_2",
+      "plants": ["plant_3", "plant_4"],
+      "title": "Seasonal Collection 2",
+      "imgSrc": "https://randomuser.me/api/portraits/women/24.jpg",
+      "discription": "Perfect plants for season 2.",
+      "theme": {
+        "color": "yellow",
+        "season": "Summer"
+      }
+    },
+    {
+      "id": "seasonal_3",
+      "plants": ["plant_5", "plant_6"],
+      "title": "Seasonal Collection 3",
+      "imgSrc": "https://randomuser.me/api/portraits/men/25.jpg",
+      "discription": "Perfect plants for season 3.",
+      "theme": {
+        "color": "green",
+        "season": "Spring"
+      }
+    },
+    {
+      "id": "seasonal_4",
+      "plants": ["plant_7", "plant_8"],
+      "title": "Seasonal Collection 4",
+      "imgSrc": "https://randomuser.me/api/portraits/women/26.jpg",
+      "discription": "Perfect plants for season 4.",
+      "theme": {
+        "color": "yellow",
+        "season": "Summer"
+      }
+    },
+    {
+      "id": "seasonal_5",
+      "plants": ["plant_9", "plant_10"],
+      "title": "Seasonal Collection 5",
+      "imgSrc": "https://randomuser.me/api/portraits/men/27.jpg",
+      "discription": "Perfect plants for season 5.",
+      "theme": {
+        "color": "green",
+        "season": "Spring"
+      }
+    }
+  ],
+  "product_bundle": [
+    {
+      "id": "bundle_1",
+      "plants": ["plant_0", "plant_1", "plant_2"],
+      "OrignalPrice": 330,
+      "discounrPrice": 280.5,
+      "PriceAroundYou": "250",
+      "title": "Indoor Plant Bundle",
+      "imgSrc": "https://randomuser.me/api/portraits/women/28.jpg",
+      "discription": "Perfect bundle for indoor plant lovers."
+    },
+    {
+      "id": "bundle_2",
+      "plants": ["plant_3", "plant_4", "plant_5"],
+      "OrignalPrice": 420,
+      "discounrPrice": 357.0,
+      "PriceAroundYou": "265",
+      "title": "Outdoor Plant Bundle",
+      "imgSrc": "https://randomuser.me/api/portraits/men/29.jpg",
+      "discription": "Beautiful outdoor plant collection."
+    },
+    {
+      "id": "bundle_3",
+      "plants": ["plant_6", "plant_7", "plant_8"],
+      "OrignalPrice": 510,
+      "discounrPrice": 433.5,
+      "PriceAroundYou": "280",
+      "title": "Low Maintenance Bundle",
+      "imgSrc": "https://randomuser.me/api/portraits/women/30.jpg",
+      "discription": "Easy to care for plants bundle."
+    },
+    {
+      "id": "bundle_4",
+      "plants": ["plant_9", "plant_10", "plant_11"],
+      "OrignalPrice": 600,
+      "discounrPrice": 510.0,
+      "PriceAroundYou": "295",
+      "title": "Decorative Plant Bundle",
+      "imgSrc": "https://randomuser.me/api/portraits/men/31.jpg",
+      "discription": "Stylish decorative plants collection."
+    }
+  ]
+}
