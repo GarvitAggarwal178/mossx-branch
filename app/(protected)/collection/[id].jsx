@@ -3,9 +3,9 @@ import React, { useCallback, useEffect } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { useDispatch } from "react-redux";
-import mossxJson from "../../mossx_plant_dataset.json";
+import mossxJson from "../../../mossx_plant_dataset.json";
+import { addBundleToCart } from "../../store/slices/cartSlice";
 import CollectionProducts from "../components/CollectionProducts";
-import { addBundleToCart } from "../store/slices/cartSlice";
 import { useTheme } from "../theme/ThemeContext";
 
 export default function CollectionPage() {
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 16,
+    marginBottom: 35,
     elevation: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -2 },

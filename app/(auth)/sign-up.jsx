@@ -1,77 +1,42 @@
-import { SignUp } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
-import { useTheme } from "../theme/ThemeContext";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAuthContext } from "../context/AuthContext";
 
-export default function SignUpScreen() {
-  const { theme } = useTheme();
-  const router = useRouter();
+export default function SignUp() {
+  const { signIn } = useAuthContext();
+
+  const handleSignUp = () => {
+    // In a real app, you would create a new user account here
+    signIn({
+      id: "1",
+      name: "New User",
+      email: "new@example.com",
+    });
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
-        <Text
-          variant="headlineLarge"
-          style={[styles.title, { color: theme.text }]}
-        >
-          Create Account
-        </Text>
-        <Text
-          variant="bodyLarge"
-          style={[styles.subtitle, { color: theme.textSecondary }]}
-        >
-          Sign up to get started
-        </Text>
-      </View>
-
-      <SignUp
-        appearance={{
-          elements: {
-            formButtonPrimary: {
-              backgroundColor: theme.primary,
-              "&:hover": {
-                backgroundColor: theme.primary + "CC",
-              },
-            },
-            card: {
-              backgroundColor: theme.surface,
-            },
-            headerTitle: {
-              color: theme.text,
-            },
-            headerSubtitle: {
-              color: theme.textSecondary,
-            },
-            formFieldLabel: {
-              color: theme.text,
-            },
-            formFieldInput: {
-              color: theme.text,
-              backgroundColor: theme.background,
-            },
-            footerActionLink: {
-              color: theme.primary,
-            },
-          },
-        }}
-        afterSignUpUrl="/"
-        signInUrl="/sign-in"
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Account</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        autoCapitalize="words"
       />
-
-      <View style={styles.footer}>
-        <Text style={{ color: theme.textSecondary }}>
-          Already have an account?{" "}
-        </Text>
-        <Button
-          mode="text"
-          onPress={() => router.push("/(auth)/sign-in")}
-          textColor={theme.primary}
-        >
-          Sign In
-        </Button>
-      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -79,24 +44,32 @@ export default function SignUpScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 32,
-    marginTop: 48,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#fff",
   },
   title: {
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 8,
-  },
-  subtitle: {
+    marginBottom: 20,
     textAlign: "center",
   },
-  footer: {
-    flexDirection: "row",
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 15,
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 8,
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 16,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

@@ -1,77 +1,37 @@
-import { SignIn } from "@clerk/clerk-expo";
-import { useRouter } from "expo-router";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
-import { useTheme } from "../theme/ThemeContext";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAuthContext } from "../context/AuthContext";
 
-export default function SignInScreen() {
-  const { theme } = useTheme();
-  const router = useRouter();
+export default function SignIn() {
+  const { signIn } = useAuthContext();
+
+  const handleSignIn = () => {
+    // In a real app, you would validate credentials here
+    signIn({
+      id: "1",
+      name: "Test User",
+      email: "test@example.com",
+    });
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
-        <Text
-          variant="headlineLarge"
-          style={[styles.title, { color: theme.text }]}
-        >
-          Welcome Back
-        </Text>
-        <Text
-          variant="bodyLarge"
-          style={[styles.subtitle, { color: theme.textSecondary }]}
-        >
-          Sign in to continue
-        </Text>
-      </View>
-
-      <SignIn
-        appearance={{
-          elements: {
-            formButtonPrimary: {
-              backgroundColor: theme.primary,
-              "&:hover": {
-                backgroundColor: theme.primary + "CC",
-              },
-            },
-            card: {
-              backgroundColor: theme.surface,
-            },
-            headerTitle: {
-              color: theme.text,
-            },
-            headerSubtitle: {
-              color: theme.textSecondary,
-            },
-            formFieldLabel: {
-              color: theme.text,
-            },
-            formFieldInput: {
-              color: theme.text,
-              backgroundColor: theme.background,
-            },
-            footerActionLink: {
-              color: theme.primary,
-            },
-          },
-        }}
-        afterSignInUrl="/"
-        signUpUrl="/sign-up"
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign In</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-
-      <View style={styles.footer}>
-        <Text style={{ color: theme.textSecondary }}>
-          Don't have an account?{" "}
-        </Text>
-        <Button
-          mode="text"
-          onPress={() => router.push("/(auth)/sign-up")}
-          textColor={theme.primary}
-        >
-          Sign Up
-        </Button>
-      </View>
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -79,24 +39,32 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 32,
-    marginTop: 48,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#fff",
   },
   title: {
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 8,
-  },
-  subtitle: {
+    marginBottom: 20,
     textAlign: "center",
   },
-  footer: {
-    flexDirection: "row",
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 15,
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 8,
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 16,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

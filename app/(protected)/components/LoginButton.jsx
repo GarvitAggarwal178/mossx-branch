@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Menu } from "react-native-paper";
-import { useAuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { useTheme } from "../theme/ThemeContext";
 
 export default function LoginButton() {

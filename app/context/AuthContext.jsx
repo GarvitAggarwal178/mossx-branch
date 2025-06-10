@@ -1,43 +1,38 @@
-import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext({});
 
-export function AuthProvider({ children }) {
-  const { isLoaded, isSignedIn, signOut } = useAuth();
-  const { user } = useUser();
+export const AuthProvider = ({ children }) => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const router = useRouter();
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    if (isLoaded) {
-      setIsInitialized(true);
-    }
-  }, [isLoaded]);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      router.replace("/");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
+  const signIn = (userData) => {
+    setUser(userData);
+    setIsSignedIn(true);
+    router.replace("/(tabs)");
   };
 
-  const value = {
-    isInitialized,
-    isSignedIn,
-    user,
-    signOut: handleSignOut,
+  const signOut = () => {
+    setUser(null);
+    setIsSignedIn(false);
+    router.replace("/(auth)/sign-in");
   };
 
-  if (!isInitialized) {
-    return null;
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        isSignedIn,
+        user,
+        signIn,
+        signOut,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
