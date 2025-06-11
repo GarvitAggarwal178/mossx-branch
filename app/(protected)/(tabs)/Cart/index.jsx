@@ -1,95 +1,110 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Button, Card, IconButton, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "../../store/slices/cartSlice";
 import { useTheme } from "../../theme/ThemeContext";
 
 export default function Cart() {
   const { theme } = useTheme();
-  const cart = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
+  const { items, total } = useSelector((state) => state.cart);
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
+  const handleQuantityChange = (productId, newQuantity) => {
+    dispatch(updateQuantity({ productId, quantity: newQuantity }));
   };
 
-  const handleUpdateQuantity = (id, quantity) => {
-    dispatch(updateQuantity({ id, quantity }));
+  const handleRemoveItem = (productId) => {
+    dispatch(removeFromCart(productId));
   };
 
-  const renderItem = ({ item }) => (
-    <View style={[styles.cartItem, { backgroundColor: theme.surface }]}>
-      <View style={styles.itemInfo}>
-        <Text style={[styles.itemName, { color: theme.text }]}>
-          {item.name}
-        </Text>
-        <Text style={[styles.itemPrice, { color: theme.textSecondary }]}>
-          ${item.price}
-        </Text>
-      </View>
-      <View style={styles.quantityContainer}>
-        <TouchableOpacity
-          style={[styles.quantityButton, { backgroundColor: theme.primary }]}
-          onPress={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-        >
-          <Text style={styles.quantityButtonText}>-</Text>
-        </TouchableOpacity>
-        <Text style={[styles.quantity, { color: theme.text }]}>
-          {item.quantity}
-        </Text>
-        <TouchableOpacity
-          style={[styles.quantityButton, { backgroundColor: theme.primary }]}
-          onPress={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-        >
-          <Text style={styles.quantityButtonText}>+</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
-        style={[styles.removeButton, { backgroundColor: theme.error }]}
-        onPress={() => handleRemoveItem(item.id)}
+  if (items.length === 0) {
+    return (
+      <View
+        style={[styles.emptyContainer, { backgroundColor: theme.background }]}
       >
-        <Text style={styles.removeButtonText}>Remove</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        <Text style={[styles.emptyText, { color: theme.text }]}>
+          Your cart is empty
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.title, { color: theme.text }]}>Shopping Cart</Text>
-      {cart.length === 0 ? (
-        <Text style={[styles.emptyText, { color: theme.textSecondary }]}>
-          Your cart is empty
-        </Text>
-      ) : (
-        <>
-          <FlatList
-            data={cart}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.list}
-          />
-          <View style={[styles.footer, { backgroundColor: theme.surface }]}>
-            <Text style={[styles.total, { color: theme.text }]}>
-              Total: ${total.toFixed(2)}
-            </Text>
-            <TouchableOpacity
-              style={[
-                styles.checkoutButton,
-                { backgroundColor: theme.primary },
-              ]}
-            >
-              <Text style={styles.checkoutButtonText}>Checkout</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+      <ScrollView style={styles.scrollView}>
+        {items.map((item) => (
+          <Card
+            key={item.id}
+            style={[styles.card, { backgroundColor: theme.surface }]}
+          >
+            <Card.Content style={styles.cardContent}>
+              <Card.Cover
+                source={{ uri: item.imagesrc }}
+                style={styles.image}
+              />
+              <View style={styles.itemDetails}>
+                <Text
+                  style={[styles.title, { color: theme.text }]}
+                  numberOfLines={2}
+                >
+                  {item.title}
+                </Text>
+                <Text style={[styles.price, { color: theme.primary }]}>
+                  ₹{item.price}
+                </Text>
+                <View style={styles.quantityContainer}>
+                  <IconButton
+                    icon="minus"
+                    size={20}
+                    onPress={() =>
+                      handleQuantityChange(item.id, item.quantity - 1)
+                    }
+                    disabled={item.quantity <= 1}
+                    iconColor={theme.primary}
+                  />
+                  <Text style={[styles.quantity, { color: theme.text }]}>
+                    {item.quantity}
+                  </Text>
+                  <IconButton
+                    icon="plus"
+                    size={20}
+                    onPress={() =>
+                      handleQuantityChange(item.id, item.quantity + 1)
+                    }
+                    iconColor={theme.primary}
+                  />
+                </View>
+              </View>
+              <IconButton
+                icon="delete"
+                size={24}
+                iconColor={theme.error}
+                onPress={() => handleRemoveItem(item.id)}
+              />
+            </Card.Content>
+          </Card>
+        ))}
+      </ScrollView>
+
+      <View style={[styles.footer, { backgroundColor: theme.surface }]}>
+        <View style={styles.totalContainer}>
+          <Text style={[styles.totalLabel, { color: theme.text }]}>Total:</Text>
+          <Text style={[styles.totalAmount, { color: theme.primary }]}>
+            ₹{total}
+          </Text>
+        </View>
+        <Button
+          mode="contained"
+          onPress={() => {
+            // TODO: Implement checkout
+            console.log("Checkout clicked");
+          }}
+          style={[styles.checkoutButton, { backgroundColor: theme.primary }]}
+        >
+          Proceed to Checkout
+        </Button>
+      </View>
     </View>
   );
 }
@@ -98,84 +113,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 20,
-  },
-  list: {
-    padding: 20,
-  },
-  cartItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  itemInfo: {
+  scrollView: {
     flex: 1,
   },
-  itemName: {
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+  },
+  card: {
+    margin: 8,
+    elevation: 2,
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  image: {
+    width: 80,
+    height: 80,
+    marginRight: 12,
+  },
+  itemDetails: {
+    flex: 1,
+  },
+  title: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "500",
     marginBottom: 4,
   },
-  itemPrice: {
-    fontSize: 14,
+  price: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 8,
   },
   quantityContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 10,
-  },
-  quantityButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  quantityButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   quantity: {
-    marginHorizontal: 10,
     fontSize: 16,
-  },
-  removeButton: {
-    padding: 8,
-    borderRadius: 4,
-  },
-  removeButtonText: {
-    color: "#fff",
-    fontSize: 12,
+    marginHorizontal: 8,
+    minWidth: 30,
+    textAlign: "center",
   },
   footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
+    padding: 16,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
-  total: {
+  totalContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  totalLabel: {
     fontSize: 18,
+    fontWeight: "500",
+  },
+  totalAmount: {
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
   },
   checkoutButton: {
-    padding: 15,
     borderRadius: 8,
-    alignItems: "center",
-  },
-  checkoutButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  emptyText: {
-    textAlign: "center",
-    fontSize: 16,
-    marginTop: 20,
   },
 });

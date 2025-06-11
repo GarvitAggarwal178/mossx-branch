@@ -1,7 +1,6 @@
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import React from "react";
 import { Icon } from "react-native-paper";
-// import { useTheme } from "../../../theme/ThemeContext";
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 import { useTheme } from "../theme/ThemeContext";
 import Cart from "./Cart";
 import Listing from "./Listing";
@@ -20,17 +19,22 @@ export default function TabLayout() {
         shadowOffset: { width: 0, height: -2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,
-        height: 60,
+        height: 100,
       }}
       activeColor={theme.primary}
       inactiveColor={theme.textSecondary}
       labeled={false}
-      screenOptions={{
-        headerShown: false,
+      screenOption={{
+        tabBarIcon: ({ color, focused }) => {
+          const iconSize = focused ? 32 : 24;
+          return (
+            <Icon color={color} source="home" size={iconSize} theme={theme} />
+          );
+        },
       }}
     >
       <Tab.Screen
-        name="Listing"
+        name="Listing/index"
         component={Listing}
         options={{
           tabBarLabel: "Home",
@@ -45,7 +49,7 @@ export default function TabLayout() {
         }}
       />
       <Tab.Screen
-        name="Cart"
+        name="Cart/index"
         component={Cart}
         options={{
           tabBarLabel: "Cart",
@@ -60,7 +64,7 @@ export default function TabLayout() {
         }}
       />
       <Tab.Screen
-        name="UserProfile"
+        name="UserProfile/index"
         component={UserProfile}
         options={{
           tabBarLabel: "Profile",

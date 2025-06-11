@@ -9,15 +9,11 @@ export default function CollectionLayout() {
       screenOptions={{
         headerShown: false,
         headerStyle: {
-          backgroundColor: theme.surface,
+          backgroundColor: theme.background,
         },
         headerTintColor: theme.text,
         headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        contentStyle: {
-          backgroundColor: theme.background,
-          paddingBottom: 100, // Add padding for the tab bar
+          fontWeight: "600",
         },
       }}
     >

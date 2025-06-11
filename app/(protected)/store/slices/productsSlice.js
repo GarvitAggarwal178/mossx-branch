@@ -1,52 +1,100 @@
 import { createSlice } from "@reduxjs/toolkit";
+import mossxJson from "../../../../mossx_plant_dataset.json";
+
+const ITEMS_PER_PAGE = 5;
 
 const initialState = {
-  items: [
-    {
-      id: "1",
-      name: "Product 1",
-      price: 29.99,
-      image: "https://picsum.photos/200",
-      description: "This is a sample product description.",
-    },
-    {
-      id: "2",
-      name: "Product 2",
-      price: 39.99,
-      image: "https://picsum.photos/201",
-      description: "This is another sample product description.",
-    },
-    {
-      id: "3",
-      name: "Product 3",
-      price: 49.99,
-      image: "https://picsum.photos/202",
-      description: "This is yet another sample product description.",
-    },
-  ],
+  allProducts: mossxJson.product,
+  filteredProducts: mossxJson.product,
+  displayedProducts: mossxJson.product.slice(0, ITEMS_PER_PAGE),
+  currentPage: 1,
+  hasMore: true,
+  filters: {
+    searchQuery: "",
+    priceRange: null,
+    category: null,
+    rating: null,
+  },
 };
 
 const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    addProduct: (state, action) => {
-      state.items.push(action.payload);
+    setFilters: (state, action) => {
+      state.filters = { ...state.filters, ...action.payload };
+      state.currentPage = 1;
+
+      // Apply filters
+      state.filteredProducts = state.allProducts.filter((product) => {
+        if (!product) return false;
+
+        // Search filter
+        const matchesSearch = state.filters.searchQuery
+          ? (product.title?.toLowerCase() || "").includes(
+              state.filters.searchQuery.toLowerCase()
+            ) ||
+            (product.discription?.toLowerCase() || "").includes(
+              state.filters.searchQuery.toLowerCase()
+            )
+          : true;
+
+        // Price range filter
+        const matchesPrice = state.filters.priceRange
+          ? (() => {
+              const [min, max] = state.filters.priceRange.split("-");
+              if (!product.price) return false;
+              if (max === "+") {
+                return product.price >= Number(min);
+              }
+              return (
+                product.price >= Number(min) && product.price <= Number(max)
+              );
+            })()
+          : true;
+
+        // Category filter
+        const matchesCategory = state.filters.category
+          ? Array.isArray(product.tags) &&
+            product.tags.includes(state.filters.category)
+          : true;
+
+        // Rating filter
+        const matchesRating = state.filters.rating
+          ? (() => {
+              if (!product.rating) return false;
+              const minRating = parseInt(state.filters.rating);
+              return product.rating >= minRating;
+            })()
+          : true;
+
+        return (
+          matchesSearch && matchesPrice && matchesCategory && matchesRating
+        );
+      });
+
+      // Update displayed products
+      state.displayedProducts = state.filteredProducts.slice(0, ITEMS_PER_PAGE);
+      state.hasMore = state.filteredProducts.length > ITEMS_PER_PAGE;
     },
-    removeProduct: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
-    updateProduct: (state, action) => {
-      const index = state.items.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.items[index] = { ...state.items[index], ...action.payload };
+    loadMore: (state) => {
+      if (!state.hasMore) return;
+
+      const nextPage = state.currentPage + 1;
+      const startIndex = (nextPage - 1) * ITEMS_PER_PAGE;
+      const endIndex = startIndex + ITEMS_PER_PAGE;
+      const newProducts = state.filteredProducts.slice(startIndex, endIndex);
+
+      if (newProducts.length === 0) {
+        state.hasMore = false;
+        return;
       }
+
+      state.displayedProducts = [...state.displayedProducts, ...newProducts];
+      state.currentPage = nextPage;
     },
   },
 });
 
-export const { addProduct, removeProduct, updateProduct } =
-  productsSlice.actions;
+export const { setFilters, loadMore } = productsSlice.actions;
 export default productsSlice.reducer;

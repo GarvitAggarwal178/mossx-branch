@@ -1,61 +1,124 @@
-import { useRouter } from "expo-router";
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useCallback } from "react";
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../store/slices/cartSlice";
+import mossxJson from "../../../../mossx_plant_dataset.json";
+import CollectionCard from "../../components/CollectionCard";
+import FilterBar from "../../components/FilterBar";
+import ProductCard from "../../components/ProductCard";
+import { loadMore, setFilters } from "../../store/slices/productsSlice";
 import { useTheme } from "../../theme/ThemeContext";
+
+const { width } = Dimensions.get("window");
+const CARD_WIDTH = width * 0.45;
 
 export default function Listing() {
   const { theme } = useTheme();
-  const router = useRouter();
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.items);
+  const { displayedProducts, hasMore, filters } = useSelector(
+    (state) => state.products
+  );
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
+  const handleLoadMore = useCallback(async () => {
+    if (!hasMore) return;
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    dispatch(loadMore());
+  }, [dispatch, hasMore]);
+
+  const handleSearch = useCallback(
+    (query) => {
+      dispatch(setFilters({ searchQuery: query }));
+    },
+    [dispatch]
+  );
+
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      dispatch(setFilters(newFilters));
+    },
+    [dispatch]
+  );
+
+  const renderHeader = () => (
+    <>
+      <Text
+        variant="displaySmall"
+        style={[styles.welcomeText, { color: theme.text }]}
+      >
+        Welcome Back
+      </Text>
+
+      <View style={styles.section}>
+        <Text
+          variant="titleLarge"
+          style={[styles.sectionTitle, { color: theme.text }]}
+        >
+          Seasonal Collections
+        </Text>
+        <FlatList
+          horizontal
+          data={mossxJson?.SeasonalCollection || []}
+          renderItem={({ item }) => (
+            <CollectionCard item={item} type="seasonal" />
+          )}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.collectionsContainer}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text
+          variant="titleLarge"
+          style={[styles.sectionTitle, { color: theme.text }]}
+        >
+          Product Bundles
+        </Text>
+        <FlatList
+          horizontal
+          data={mossxJson?.product_bundle || []}
+          renderItem={({ item }) => (
+            <CollectionCard item={item} type="bundle" />
+          )}
+          keyExtractor={(item) => item.id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.collectionsContainer}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text
+          variant="titleLarge"
+          style={[styles.sectionTitle, { color: theme.text }]}
+        >
+          All Products
+        </Text>
+        <FilterBar
+          onSearch={handleSearch}
+          onFilterChange={handleFilterChange}
+        />
+      </View>
+    </>
+  );
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={[styles.productCard, { backgroundColor: theme.surface }]}
-      onPress={() => router.push(`/product/${item.id}`)}
-    >
-      <Image source={{ uri: item.image }} style={styles.productImage} />
-      <View style={styles.productInfo}>
-        <Text
-          style={[styles.productName, { color: theme.text }]}
-          numberOfLines={2}
-        >
-          {item.name}
-        </Text>
-        <Text style={[styles.productPrice, { color: theme.primary }]}>
-          ${item.price}
-        </Text>
-        <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: theme.primary }]}
-          onPress={() => handleAddToCart(item)}
-        >
-          <Text style={styles.addButtonText}>Add to Cart</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+    <ProductCard item={item} style={styles.productCard} />
   );
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.title, { color: theme.text }]}>Products</Text>
       <FlatList
-        data={products}
+        data={displayedProducts || []}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={renderHeader}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        showsVerticalScrollIndicator={false}
         numColumns={2}
-        contentContainerStyle={styles.list}
+        columnWrapperStyle={styles.columnWrapper}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -65,46 +128,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 20,
+  welcomeText: {
+    padding: 16,
+    fontWeight: "600",
   },
-  list: {
-    padding: 10,
+  section: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    paddingHorizontal: 16,
+    marginBottom: 8,
+    fontWeight: "600",
+  },
+  collectionsContainer: {
+    paddingHorizontal: 8,
+    gap: 16,
+  },
+  listContent: {
+    padding: 8,
+  },
+  columnWrapper: {
+    justifyContent: "space-between",
+    paddingHorizontal: 8,
   },
   productCard: {
-    flex: 1,
-    margin: 8,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  productImage: {
-    width: "100%",
-    height: 150,
-    resizeMode: "cover",
-  },
-  productInfo: {
-    padding: 12,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  productPrice: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  addButton: {
-    padding: 8,
-    borderRadius: 4,
-    alignItems: "center",
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
+    width: CARD_WIDTH,
+    marginBottom: 16,
   },
 });

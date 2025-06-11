@@ -1,9 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { Slot } from "expo-router";
+import * as React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./(protected)/theme/ThemeContext";
-import { AuthProvider } from "./context/AuthContext";
+import RootLayoutNav from "./providers/ClerkProvider";
 import store from "./store";
 
 export default function RootLayout() {
@@ -11,11 +11,9 @@ export default function RootLayout() {
     <Provider store={store}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <AuthProvider>
-            <NavigationContainer>
-              <Slot />
-            </NavigationContainer>
-          </AuthProvider>
+          <NavigationContainer>
+            <RootLayoutNav />
+          </NavigationContainer>
         </ThemeProvider>
       </SafeAreaProvider>
     </Provider>
