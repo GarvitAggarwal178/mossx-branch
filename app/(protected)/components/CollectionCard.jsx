@@ -1,104 +1,205 @@
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Card, Text } from "react-native-paper";
+import { useState } from "react";
+import { Animated, Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 import { useTheme } from "../theme/ThemeContext";
+
+const { width } = Dimensions.get("window");
 
 export default function CollectionCard({ item, type }) {
   const { theme } = useTheme();
   const router = useRouter();
+  const [scaleAnim] = useState(new Animated.Value(1));
 
   const handlePress = () => {
     router.push({
       pathname: "/collection/[id]",
-      params: {
-        id: item.id,
-        type,
-      },
+      params: { id: item.id, type },
     });
   };
 
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.97,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const getLabelText = () => {
+    if (type === "seasonal" && item.theme?.season) return `${item.theme.season} Picks`;
+    if (type === "bundle") return "Bundle Deal";
+    return "Collection";
+  };
+
   return (
-    <Pressable onPress={handlePress}>
-      <Card style={[styles.card, { backgroundColor: theme.surface }]}>
-        <Card.Cover source={{ uri: item.imgSrc }} style={styles.image} />
-        <Card.Content style={styles.content}>
-          <Text style={[styles.title, { color: theme.text }]} numberOfLines={1}>
-            {item.title}
-          </Text>
-          <Text
-            style={[styles.description, { color: theme.textSecondary }]}
-            numberOfLines={2}
+    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <Pressable
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        style={styles.container}
+      >
+        <View style={styles.cardContainer}>
+          <Image
+            source={{ uri: item.imgSrc }}
+            style={styles.backgroundImage}
+            contentFit="cover"
+            transition={300}
+          />
+
+          <LinearGradient
+            colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.65)"]}
+            style={styles.gradientOverlay}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+          />
+
+          <View
+            style={[
+              styles.labelChip,
+              {
+                backgroundColor: theme.isDarkMode
+                  ? "rgba(165, 214, 167, 0.2)"
+                  : "rgba(76, 175, 80, 0.1)",
+              },
+            ]}
           >
-            {item.discription}
-          </Text>
-          {type === "bundle" && (
-            <View style={styles.priceContainer}>
-              <Text
-                style={[styles.originalPrice, { color: theme.textSecondary }]}
-              >
-                ₹{item.OrignalPrice}
+            <Text style={[styles.labelText, { color: theme.primary }]}>
+              {getLabelText()}
+            </Text>
+          </View>
+
+          <View style={styles.titleContent}>
+            <Text style={styles.titleText} numberOfLines={2}>
+              {item.title}
+            </Text>
+            {item.discription && (
+              <Text style={styles.subtitleText} numberOfLines={1}>
+                {item.discription}
               </Text>
-              <Text style={[styles.discountPrice, { color: theme.primary }]}>
-                ₹{item.discounrPrice}
-              </Text>
-            </View>
-          )}
-          {type === "seasonal" && item.theme && (
-            <View style={styles.themeContainer}>
-              <Text style={[styles.theme, { color: theme.primary }]}>
-                {item.theme.season}
-              </Text>
-            </View>
-          )}
-        </Card.Content>
-      </Card>
-    </Pressable>
+            )}
+            {type === "bundle" && item.discounrPrice && (
+              <Text style={styles.priceText}>₹{item.discounrPrice}</Text>
+            )}
+          </View>
+
+          <View style={styles.arrowContainer}>
+            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" style={styles.arrowIcon} />
+          </View>
+        </View>
+      </Pressable>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    margin: 8,
-    elevation: 3,
-    borderRadius: 12,
+  container: {
+    marginRight: 12,
+  },
+  cardContainer: {
+    width: width * 0.9,
+    minWidth: width * 0.9,
+    height: 300,
+    borderRadius: 20,
     overflow: "hidden",
-    width: 280,
+    position: "relative",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 6,
   },
-  image: {
-    height: 160,
+  backgroundImage: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    borderRadius: 20,
   },
-  content: {
-    padding: 12,
+  gradientOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "50%",
   },
-  title: {
+  labelChip: {
+    position: "absolute",
+    top: 16,
+    left: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  labelText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  titleContent: {
+    position: "absolute",
+    bottom: 16,
+    left: 16,
+    right: 50,
+    paddingHorizontal: 0,
+    paddingBottom: 0,
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 4,
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
+  },
+  subtitleText: {
+    fontSize: 14,
+    color: "rgba(255,255,255,0.9)",
+    marginBottom: 4,
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
+  },
+  priceText: {
     fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 4,
+    color: "#A5D6A7",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
-  description: {
-    fontSize: 14,
-    marginBottom: 8,
-    lineHeight: 20,
-  },
-  priceContainer: {
-    flexDirection: "row",
+  arrowContainer: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     alignItems: "center",
-    gap: 8,
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.3)",
   },
-  originalPrice: {
-    fontSize: 14,
-    textDecorationLine: "line-through",
-  },
-  discountPrice: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  themeContainer: {
-    marginTop: 4,
-  },
-  theme: {
-    fontSize: 14,
-    fontWeight: "500",
+  arrowIcon: {
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 });
